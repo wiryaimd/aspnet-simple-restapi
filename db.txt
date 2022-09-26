@@ -1,0 +1,37 @@
+
+
+users -> 
+	id : uid,
+	email : string,
+	address : string,
+	password : string,
+	register_date : datetime
+	gender : male, female
+	role : admin, user, vip
+	
+products ->
+	id : uid
+	name : string
+	category : string
+	unit : kg, pcs, etc
+	quantity : int
+	price : decimal / float in db
+	
+order_product ->
+	order_id : uid
+	product_id : uid
+	
+order ->
+	id : uid
+	user_id : uid
+	order_date : datetime,
+	total : decimal,
+	is_confirmed : bit
+	
+payment ->
+	user_id -> uid
+	type -> ovo, dana, gopay
+	balance -> decimal / float in db
+	
+	
+	
