@@ -2,8 +2,13 @@ use aspnet_simple_restapi;
 
 --create table Users(Id uniqueidentifier primary key, Email varchar(32) not null, Password varchar(32) not null, Address varchar(256), RegisterDate datetime not null, Gender int, Role int not null);
 --create table Products(Id uniqueidentifier primary key, Name varchar(32) not null, Category varchar(32), Unit int not null, Quantity int not null, Price float not null)
+create table OrderDetail(Id uniqueidentifier primary key, UserId uniqueidentifier, OrderDate datetime, Total float, IsConfirmed bit, foreign key(UserId) references Users(Id));
 
-create table OrderProduct(OrderId uniqueidentifier not null, ProductId uniqueidentifier not null, foreign key(ProductId) references Products(Id));
+create table OrderProduct(OrderDetailId uniqueidentifier not null, ProductId uniqueidentifier not null, foreign key(OrderDetailId) references OrderDetail(Id), foreign key(ProductId) references Products(Id));
+create table Payment(Id uniqueidentifier primary key, UserId uniqueidentifier, PaymentType int not null, Balance float not null, foreign key (UserId) references Users(Id));
 
+alter table OrderDetail alter column IsConfirmed bit not null;
+
+select * from OrderDetail;
 select * from Users;
 select * from Products;
