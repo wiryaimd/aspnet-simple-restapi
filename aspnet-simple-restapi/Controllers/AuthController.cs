@@ -22,6 +22,7 @@ namespace aspnet_simple_restapi.Controllers
         {
             _context = context;
             _config = config;
+            
         }
 
         private string CreateToken(User user) {
