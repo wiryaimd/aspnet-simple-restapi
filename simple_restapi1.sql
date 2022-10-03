@@ -7,9 +7,16 @@ use aspnet_simple_restapi;
 --create table OrderProduct(OrderDetailId uniqueidentifier not null, ProductId uniqueidentifier not null, foreign key(OrderDetailId) references OrderDetail(Id), foreign key(ProductId) references Products(Id));
 --create table Payment(Id uniqueidentifier primary key, UserId uniqueidentifier, PaymentType int not null, Balance float not null, foreign key (UserId) references Users(Id));
 
+create table Albums(Id uniqueidentifier primary key, UserId uniqueidentifier not null, Name varchar(32) not null, foreign key(UserId) references Users(Id));
+create table Photos(Id uniqueidentifier primary key, AlbumId uniqueidentifier not null, FileName varchar(32), Path varchar(256), foreign key(AlbumId) references Albums(Id));
+
 alter table OrderDetail alter column IsConfirmed bit not null;
 --alter table Users alter column Gender varchar(32) not null;
 alter table OrderProduct add Id uniqueidentifier primary key;
+
+select * from Users;
+select * from Albums;
+select * from Photos;
 
 select * from OrderDetail;
 select * from OrderProduct;
