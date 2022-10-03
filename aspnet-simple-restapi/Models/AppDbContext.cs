@@ -41,7 +41,6 @@ namespace aspnet_simple_restapi.Models
 
             modelBuilder.Entity<OrderProduct>(entity =>
             {
-                entity.HasNoKey();
 
                 entity.ToTable("OrderProduct");
 

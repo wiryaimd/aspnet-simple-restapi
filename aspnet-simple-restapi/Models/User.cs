@@ -41,7 +41,10 @@ namespace aspnet_simple_restapi.Models
             Male, Female
         }
 
+        [JsonIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+
+
         public virtual ICollection<Payment> Payments { get; set; }
     }
 }

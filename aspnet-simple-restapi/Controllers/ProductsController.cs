@@ -75,6 +75,7 @@ namespace aspnet_simple_restapi.Controllers
 
         [Authorize(Roles = "Admin")] // role case sensitive
         [HttpPost]
+        [Consumes("application/xml")]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             _context.Products.Add(product);
@@ -97,7 +98,7 @@ namespace aspnet_simple_restapi.Controllers
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {

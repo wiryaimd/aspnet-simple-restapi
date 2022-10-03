@@ -9,8 +9,13 @@ use aspnet_simple_restapi;
 
 alter table OrderDetail alter column IsConfirmed bit not null;
 --alter table Users alter column Gender varchar(32) not null;
+alter table OrderProduct add Id uniqueidentifier primary key;
 
 select * from OrderDetail;
+select * from OrderProduct;
 select * from Users;
 select * from Products;
+select * from Payment;
+
+delete from Payment where Id = '3FA85F64-5717-4562-B3FC-2C963F66AFA6';
 

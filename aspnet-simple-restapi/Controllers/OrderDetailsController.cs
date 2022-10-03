@@ -12,47 +12,44 @@ namespace aspnet_simple_restapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentsController : ControllerBase
+    public class OrderDetailsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public PaymentsController(AppDbContext context)
+        public OrderDetailsController(AppDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<Payment>>> GetPayments(int page = 0)
+        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetails()
         {
-            List<Payment> paymentList = await _context.Payments.ToListAsync();
-            return paymentList.OrderBy(p => p.Balance).Skip((page * 10) - 10).Take(10).ToList();
+            // inget karena virtual lazy-load, maka class User yg ada pada model OrderDetails perlu di include terlebih dahulu
+            return await _context.OrderDetails.Include(od => od.User).ToListAsync();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Payment>> GetPayment(Guid id)
+        public async Task<ActionResult<OrderDetail>> GetOrderDetail(Guid id)
         {
-            var payment = await _context.Payments.FindAsync(id);
+            var orderDetail = await _context.OrderDetails.FindAsync(id);
 
-            if (payment == null)
+            if (orderDetail == null)
             {
                 return NotFound();
             }
 
-            return payment;
+            return orderDetail;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPayment(Guid id, Payment payment)
+        public async Task<IActionResult> PutOrderDetail(Guid id, OrderDetail orderDetail)
         {
-            if (id != payment.Id)
+            if (id != orderDetail.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(payment).State = EntityState.Modified;
+            _context.Entry(orderDetail).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +57,7 @@ namespace aspnet_simple_restapi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PaymentExists(id))
+                if (!OrderDetailExists(id))
                 {
                     return NotFound();
                 }
@@ -73,18 +70,17 @@ namespace aspnet_simple_restapi.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Payment>> PostPayment(Payment payment)
+        public async Task<ActionResult<OrderDetail>> PostOrderDetail(OrderDetail orderDetail)
         {
-            _context.Payments.Add(payment);
+            _context.OrderDetails.Add(orderDetail);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (PaymentExists(payment.Id))
+                if (OrderDetailExists(orderDetail.Id))
                 {
                     return Conflict();
                 }
@@ -94,28 +90,27 @@ namespace aspnet_simple_restapi.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPayment", new { id = payment.Id }, payment);
+            return CreatedAtAction("GetOrderDetail", new { id = orderDetail.Id }, orderDetail);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePayment(Guid id)
+        public async Task<IActionResult> DeleteOrderDetail(Guid id)
         {
-            var payment = await _context.Payments.FindAsync(id);
-            if (payment == null)
+            var orderDetail = await _context.OrderDetails.FindAsync(id);
+            if (orderDetail == null)
             {
                 return NotFound();
             }
 
-            _context.Payments.Remove(payment);
+            _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PaymentExists(Guid id)
+        private bool OrderDetailExists(Guid id)
         {
-            return _context.Payments.Any(e => e.Id == id);
+            return _context.OrderDetails.Any(e => e.Id == id);
         }
     }
 }
