@@ -16,14 +16,31 @@ namespace aspnet_simple_restapi.Models
         {
         }
 
+        public virtual DbSet<Album> Albums { get; set; } = null!;
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<OrderProduct> OrderProducts { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
+        public virtual DbSet<Photo> Photos { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Album>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Albums)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Albums__UserId__49C3F6B7");
+            });
+
             modelBuilder.Entity<OrderDetail>(entity =>
             {
                 entity.ToTable("OrderDetail");
@@ -41,17 +58,18 @@ namespace aspnet_simple_restapi.Models
 
             modelBuilder.Entity<OrderProduct>(entity =>
             {
-
                 entity.ToTable("OrderProduct");
 
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.HasOne(d => d.OrderDetail)
-                    .WithMany()
+                    .WithMany(p => p.OrderProducts)
                     .HasForeignKey(d => d.OrderDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__OrderProd__Order__2D27B809");
 
                 entity.HasOne(d => d.Product)
-                    .WithMany()
+                    .WithMany(p => p.OrderProducts)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__OrderProd__Produ__2E1BDC42");
@@ -67,6 +85,25 @@ namespace aspnet_simple_restapi.Models
                     .WithMany(p => p.Payments)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK__Payment__UserId__30F848ED");
+            });
+
+            modelBuilder.Entity<Photo>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.FileName)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Path)
+                    .HasMaxLength(256)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Album)
+                    .WithMany(p => p.Photos)
+                    .HasForeignKey(d => d.AlbumId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Photos__AlbumId__4CA06362");
             });
 
             modelBuilder.Entity<Product>(entity =>

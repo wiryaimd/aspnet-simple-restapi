@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 Console.WriteLine("cek typeof: " + typeof(JsonStringEnumConverter)); // dengan ngeprint full nama package classnya
 
