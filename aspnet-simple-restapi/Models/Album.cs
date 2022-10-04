@@ -18,7 +18,7 @@ namespace aspnet_simple_restapi.Models
         [JsonIgnore]
         public virtual User? User { get; set; } = null!;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ICollection<Photo>? Photos { get; set; }
     }
 }

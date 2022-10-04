@@ -57,7 +57,7 @@ namespace aspnet_simple_restapi.Controllers
             return Ok(CreateToken(user));
         }
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<ActionResult<User>> RegisterUser(UserDto userDto) {
             bool isAvailable = _context.Users.Any(u => u.Email.Equals(userDto.Email));
             if (isAvailable) {

@@ -33,7 +33,7 @@ namespace aspnet_simple_restapi.Controllers
             if (photo == null) {
                 return NotFound();
             }
-            byte[] img = System.IO.File.ReadAllBytes(path + "/Photos/" + photo.Path);
+            byte[] img = System.IO.File.ReadAllBytes(path + "/Photos/" + photo.FileName);
             return File(img, "image/jpg");
         }
 

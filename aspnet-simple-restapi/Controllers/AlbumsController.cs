@@ -26,7 +26,7 @@ namespace aspnet_simple_restapi.Controllers
             }
             User? user = _context.Users.Where(u => u.Email.Equals(email)).FirstOrDefault();
 
-            return await _context.Albums.Where(a => a.UserId.Equals(user.Id)).ToListAsync();
+            return await _context.Albums.Where(a => a.UserId.Equals(user.Id)).Include(a => a.Photos).ToListAsync();
         }
 
         [Authorize]
